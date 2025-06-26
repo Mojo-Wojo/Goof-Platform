@@ -25,7 +25,6 @@ app.get('/api/network-status', (req, res) => {
 
     // Executing the command
     exec(command, (error, stdout, stderr) => {
-
         if (error) {
             console.error(`Execution error: ${error.message}`);
             // It's generally not a good idea to send raw error messages to the client
