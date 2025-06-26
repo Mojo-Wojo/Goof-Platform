@@ -36,7 +36,7 @@ exports.index = function (req, res, next) {
 
 exports.loginHandler = function (req, res, next) {
   if (validator.isEmail(req.body.username)) {
-    User.find({ username: req.body.username, password: req.body.password }, function (err, users) {
+    User.find({ username: req.body.username.toString(), password: req.body.password.toString() }, function (err, users) {
       if (users.length > 0) {
         const redirectPage = req.body.redirectPage
         const session = req.session
@@ -86,31 +86,7 @@ exports.get_account_details = function(req, res, next) {
  	return res.render('account.hbs', profile)
 }
 
-exports.save_account_details = function(req, res, next) {
-  // get the profile details from the JSON
-	const profile = req.body
-  // validate the input
-  if (validator.isEmail(profile.email, { allow_display_name: true })
-    // allow_display_name allows us to receive input as:
-    // Display Name <email-address>
-    // which we consider valid too
-    && validator.isMobilePhone(profile.phone, 'he-IL')
-    && validator.isAscii(profile.firstname)
-    && validator.isAscii(profile.lastname)
-    && validator.isAscii(profile.country)
-  ) {
-    // trim any extra spaces on the right of the name
-    profile.firstname = validator.rtrim(profile.firstname)
-    profile.lastname = validator.rtrim(profile.lastname)
 
-    // render the view
-    return res.render('account.hbs', profile)
-  } else {
-    // if input validation fails, we just render the view as is
-    console.log('error in form details')
-    return res.render('account.hbs')
-  }
-}
 
 exports.isLoggedIn = function (req, res, next) {
   if (req.session.loggedIn === 1) {
